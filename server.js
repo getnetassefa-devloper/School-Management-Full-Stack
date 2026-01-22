@@ -9,13 +9,11 @@ import pg from "pg";
 
 const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
 const adapter = new PrismaPg(pool);
-
 const app = express();
 const { PrismaClient } = pkg;
 const prisma = new PrismaClient({ adapter });
 app.use(cors());
 app.use(express.json());
-
 const PORT = 5000;
 
 app.post("/api/register", async (req, res) => {
