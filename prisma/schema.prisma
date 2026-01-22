@@ -1,0 +1,82 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+//Model shows the table name and all other properties of the column inthe table.
+
+//user model
+model User{
+  id String @id @default(cuid())
+  fullName String 
+  gender Sex @default(MALE)
+  password String @default("1234")
+  email String @unique
+  role Role @default(STUDENT)
+  student Student?
+  teacher Teacher?
+}
+
+model Student{
+  id String @id @unique @default(cuid())
+  gender Sex @default(MALE)
+  age Int @default(18)
+
+  //Time Stamp for critical data
+  enrollmentTime DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  //User Status
+  status UserStatus @default(ACTIVE)
+  //connect to user table
+  userId String @unique
+  user User @relation(fields:[userId],references:[id])
+}
+
+//Teachers model
+
+model Teacher{
+  id String @id @default(cuid())
+  gender Sex @default(MALE)
+  bio String?
+  salary Decimal?
+  //connect to user model
+  userId String @unique
+  user User @relation(fields:[userId],references:[id])
+
+  courses Course[]
+}
+
+
+//Course Model
+model Course{
+  id String  @id @default(cuid())
+  title String 
+  description String?
+  credits Int
+
+  //connect to teacher table
+  teacherId String
+  teacher Teacher @relation(fields:[teacherId],references:[id])
+}
+
+enum UserStatus{
+  ACTIVE
+  DROPOUT
+  SUSPENDED
+}
+enum Sex{
+  MALE
+  FEMALE
+}
+enum Role{
+  ADMIN
+  TEACHER
+  STUDENT
+ FINANCE
+}
