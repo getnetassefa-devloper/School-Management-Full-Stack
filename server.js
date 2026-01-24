@@ -6,11 +6,12 @@ import bcrypt from "bcrypt";
 import pkg from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import pg from "pg";
+import { PrismaClient } from "@prisma/client";
 
 const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
 const adapter = new PrismaPg(pool);
 const app = express();
-const { PrismaClient } = pkg;
+// const { PrismaClient } = pkg;
 const prisma = new PrismaClient({ adapter });
 app.use(cors());
 app.use(express.json());
@@ -20,7 +21,9 @@ app.post("/api/register", async (req, res) => {
   // console.log("Your request ---> ",req.body)
   const { fullName, email, password, role, gender } = req.body;
   try {
+    // console.log("----> Above exist")
     const userExists = await prisma.user.findUnique({ where: { email } });
+
     if (userExists)
       return res.status(400).json({ error: "User already exists" });
 
@@ -47,7 +50,7 @@ app.post("/api/register", async (req, res) => {
       .json({ message: "Registration Successfull", userId: result.id });
   } catch (err) {
     console.log("Error---> ", err);
-    return res.status(500).json({ error: "Registration unsuccessful" });
+    return res.status(500).json({ error: "Oops....Registration unsuccessful" });
   }
 });
 
