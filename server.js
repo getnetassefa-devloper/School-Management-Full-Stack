@@ -7,6 +7,7 @@ import pkg from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import pg from "pg";
 import { PrismaClient } from "@prisma/client";
+import jwt from "jsonwebtoken";
 
 const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
 const adapter = new PrismaPg(pool);
@@ -51,6 +52,53 @@ app.post("/api/register", async (req, res) => {
   } catch (err) {
     console.log("Error---> ", err);
     return res.status(500).json({ error: "Oops....Registration unsuccessful" });
+  }
+});
+
+//LogIn End point logic
+app.post("/api/login", async (req, res) => {
+  const { email, password } = req.body;
+  // find if the email exists
+  try {
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      console.log("email doesnt exist.......");
+      return res
+        .status(401)
+        .json({ success: false, error: "Email or Password error" });
+    }
+    // check the password
+    const passwordMatches = await bcrypt.compare(password, user.password);
+    if (!passwordMatches) {
+      console.log("Invalid password");
+      return res
+        .status(401)
+        .json({ success: false, error: "Email or Password error" });
+    }
+
+    //Return the user email and user name,if the user is authenticated.
+    const { password: _, ...userWithoutPassword } = user;
+    const token = jwt.sign(
+      {
+        fullName: userWithoutPassword.fullName,
+        role: userWithoutPassword.role,
+      },
+      process.env.JWT_SEC_KEY,
+      { expiresIn: "7d" },
+    );
+    // console.log("Your token----> ")
+
+    return res.status(200).json({
+      message: "Login Successfull",
+      token,
+      user: userWithoutPassword,
+    });
+  } catch (err) {
+    console.log("Error----->", err);
+    return res.status(500).json({
+      message: "Server fail.",
+      error: "Internal server error",
+    });
   }
 });
 
