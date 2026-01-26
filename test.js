@@ -1,30 +1,35 @@
-app.post("/api/login", async (req, res) => {
-  const { email, password } = req.body;
+"use client";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
-  try {
-    // 1. Find user by email
-    const user = await prisma.user.findUnique({ where: { email } });
+export default function ProtectedRoute({ children, allowedRoles }) {
+  const [isAuthorized, setAuthorized] = useState(false);
+  const route = useRouter();
+  //Now check if they are logged in
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const userJson = localStorage.getItem("user");
+    const user = JSON.parse(userJson);
 
-    if (!user) {
-      return res.status(401).json({ error: "Invalid email or password" });
+    if (!token || !user) {
+      alert("You are not logged In");
+      route.push("/login");
+      return;
     }
 
-    // 2. Check password
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    //Now check the Role permisson
+    if (!allowedRoles.includes(user.role)) setAuthorized(false);
+    else setAuthorized(true);
+    //Allow the actual page that they want to access
+  }, [route, allowedRoles]);
 
-    if (!isPasswordValid) {
-      return res.status(401).json({ error: "Invalid email or password" });
-    }
-
-    // 3. Success! Return user data (but NOT the password)
-    const { password: _, ...userWithoutPassword } = user;
-    res.status(200).json({ 
-      message: "Login successful", 
-      user: userWithoutPassword 
-    });
-
-  } catch (error) {
-    console.error("Login error:", error);
-    res.status(500).json({ error: "Internal server error" });
+  if (!isAuthorized) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <p className="text-red-600 font-bold">Checking Permissions...</p>
+      </div>
+    );
   }
-});
+
+  return <>{children}</>;
+}
