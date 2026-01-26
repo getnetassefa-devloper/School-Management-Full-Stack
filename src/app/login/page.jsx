@@ -45,7 +45,7 @@ export default function LogIn() {
         // Role based access
         if (user.role === "ADMIN") route.push("/dashboard");
         else if (user.role === "TEACHER") route.push("/teacher/classes");
-        else route.push("/class");
+        else route.push("/navbar");
 
 
         return { success: true };
