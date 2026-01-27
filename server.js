@@ -9,6 +9,7 @@ import pg from "pg";
 import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import { verifyToken } from "./MiddleWare/authMiddleware.js"
+import  restrictTo  from "./MiddleWare/roleMiddleware.js"
 
 const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
 const adapter = new PrismaPg(pool);
@@ -120,12 +121,8 @@ app.post("/api/login", async (req, res) => {
 
 // ... other code ...
 
-app.get("/api/admin/students/list", verifyToken, async (req, res) => {
+app.get("/api/admin/students/list", verifyToken,restrictTo("ADMIN"), async (req, res) => {
   // Only allow if the role in the TOKEN is ADMIN
-  if (req.user.role !== "ADMIN") {
-    return res.status(403).json({ error: "Access denied. Admins only." });
-  }
-
   try {
     const students = await prisma.user.findMany({
       where: { role: "STUDENT" },
