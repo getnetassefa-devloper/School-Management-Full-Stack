@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🎓 Enterprise School Management System (SMS)
 
-## Getting Started
+A high-performance, scalable Full-Stack solution for academic administration. This system is engineered with a "Security-First" mindset, utilizing the latest trends in the Next.js and Node.js ecosystems.
 
-First, run the development server:
+---
 
+## 🛠️ Advanced Tech Stack (Production Standards)
+
+* **Frontend:** Next.js 15 (App Router) with **React Server Components (RSC)** for optimal SEO and speed.
+* **State Management:** **TanStack Query (React Query)** for server-state synchronization and caching.
+* **Styling:** **Shadcn/UI** & **Tailwind CSS** for a design-system-driven interface.
+* **Security:** **JWT (JSON Web Tokens)** managed via secure, cross-site scripting (XSS) resistant **HTTP-Only Cookies**.
+* **Database:** **PostgreSQL** with **Prisma ORM** using connection pooling for high availability.
+
+---
+
+## 🏗️ Role-Based Access Control (RBAC) Architecture
+
+The system implements a granular permission model:
+* **Super Admin:** Full system configuration, audit logs, and global user management.
+* **Academic Staff:** Grade management, attendance tracking, and student performance analytics.
+* **Student:** Personal dashboard, assignment submission, and real-time grade tracking.
+
+---
+
+## 🔒 Security & Performance Features (Roadmap)
+
+- [x] **JWT Authentication:** Secure stateless session management.
+- [ ] **HTTP-Only Cookie Migration:** Shifting from LocalStorage to Cookies for maximum security (Latest Trend).
+- [ ] **Zod Validation:** Type-safe schema validation for all API requests and Form inputs.
+- [ ] **Optimistic UI Updates:** Using React `useOptimistic` for instant user feedback during data mutations.
+- [ ] **Rate Limiting:** Protecting API endpoints from Brute Force and DDoS attacks.
+
+---
+
+## 🚦 Installation & Development
+
+## 📦 Getting Started
+
+### 1. Clone the repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+git clone [https://github.com/getnetassefa-devloper/School-Management-Full-Stack.git](https://github.com/getnetassefa-devloper/School-Management-Full-Stack.git)
+cd school-management-system
