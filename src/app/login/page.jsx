@@ -43,7 +43,7 @@ export default function LogIn() {
         localStorage.setItem("user",JSON.stringify(user))
 
         // Role based access
-        if (user.role === "ADMIN") route.push("/dashboard");
+        if (user.role === "ADMIN") route.push("/admin/dashboard");
         else if (user.role === "TEACHER") route.push("/teacher/classes");
         else route.push("/navbar");
 

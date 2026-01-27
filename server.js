@@ -8,6 +8,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import pg from "pg";
 import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
+import { verifyToken } from "./MiddleWare/authMiddleware.js"
 
 const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
 const adapter = new PrismaPg(pool);
@@ -94,11 +95,45 @@ app.post("/api/login", async (req, res) => {
       user: userWithoutPassword,
     });
   } catch (err) {
-    console.log("Error----->", err);
+    // console.log("Error----->", err);
     return res.status(500).json({
       message: "Server fail.",
       error: "Internal server error",
     });
+  }
+});
+
+// app.get("/api/admin/stats", verifyToken, async (req, res) => {
+//   // EXTRA SECURITY: Check the role attached to the token
+//   if (req.user.role !== "ADMIN") {
+//     return res.status(403).json({ error: "Admin resource only!" });
+//   }
+
+//   try {
+//     const studentCount = await prisma.student.count();
+//     res.json({ totalStudents: studentCount });
+//   } catch (err) {
+//     res.status(500).json({ error: "Server Error" });
+//   }
+// });
+
+
+// ... other code ...
+
+app.get("/api/admin/students/list", verifyToken, async (req, res) => {
+  // Only allow if the role in the TOKEN is ADMIN
+  if (req.user.role !== "ADMIN") {
+    return res.status(403).json({ error: "Access denied. Admins only." });
+  }
+
+  try {
+    const students = await prisma.user.findMany({
+      where: { role: "STUDENT" },
+      select: { id: true, fullName: true, email: true, gender: true } // Don't send passwords!
+    });
+    res.json(students);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch students" });
   }
 });
 

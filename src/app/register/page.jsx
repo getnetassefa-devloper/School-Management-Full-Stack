@@ -105,6 +105,7 @@ export default function Registration() {
                   <SelectContent>
                     <SelectItem value="STUDENT">Student</SelectItem>
                     <SelectItem value="TEACHER">Teacher</SelectItem>
+                    <SelectItem value="ADMIN">Admin</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

@@ -2,9 +2,11 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function AdminDashboard() {
   return (
-    <ProtectedRoute allowedRoles={["ADMIN"]}>
-      <h1>Welcome, Admin!</h1>
-      <p>Only admins can see this secret panel.</p>
+    <ProtectedRoute allowedRoles={["ADMIN"]} className='p-3'>
+        <div className=" flex flex-col justify-center gap-3 p-5">
+      <h1 className='text-2xl font-bold flex justify-center'>Welcome, Admin!</h1>
+      <p className='flex justify-center'>Only admins can see this secret panel.</p>
+        </div>
     </ProtectedRoute>
   );
 }
