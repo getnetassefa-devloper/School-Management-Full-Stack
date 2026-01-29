@@ -1,21 +1,14 @@
-import dotenv from "dotenv";
-dotenv.config({ path: ".env.local" });
 import express from "express";
 import cors from "cors";
 import bcrypt from "bcrypt";
-import pkg from "@prisma/client";
-import { PrismaPg } from "@prisma/adapter-pg";
-import pg from "pg";
-import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import { verifyToken } from "./MiddleWare/authMiddleware.js"
 import  restrictTo  from "./MiddleWare/roleMiddleware.js"
+import {getAllStudents,getClassStudents,addStudent}  from './Controller/studentController.js'
+import {prisma} from './config/prisma.js'
 
-const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
-const adapter = new PrismaPg(pool);
+
 const app = express();
-// const { PrismaClient } = pkg;
-const prisma = new PrismaClient({ adapter });
 app.use(cors());
 app.use(express.json());
 const PORT = 5000;
@@ -31,7 +24,6 @@ app.post("/api/register", async (req, res) => {
       return res.status(400).json({ error: "User already exists" });
 
     const hashedPwd = await bcrypt.hash(password, 12);
-    // if(hashedPwd){console.log("Hashed Password--> ",hashedPwd)}
     //Now create a user and profile
     const result = await prisma.$transaction(async (tx) => {
       const user = await tx.user.create({
@@ -121,19 +113,11 @@ app.post("/api/login", async (req, res) => {
 
 // ... other code ...
 
-app.get("/api/admin/students/list", verifyToken,restrictTo("ADMIN"), async (req, res) => {
-  // Only allow if the role in the TOKEN is ADMIN
-  try {
-    const students = await prisma.user.findMany({
-      where: { role: "STUDENT" },
-      select: { id: true, fullName: true, email: true, gender: true } // Don't send passwords!
-    });
-    res.json(students);
-  } catch (err) {
-    res.status(500).json({ error: "Failed to fetch students" });
-  }
-});
+app.get("/api/admin/students/list", verifyToken,restrictTo("ADMIN"),getAllStudents)
+app.post("/api/register/newStudent",verifyToken,restrictTo("ADMIN","REGISTRAL"),addStudent)
 
+
+// Deleting the student from the database is the role of the admin
 app.listen(PORT, () =>
   console.log(`Express Backend at http://localhost:${PORT} running.`),
 );
