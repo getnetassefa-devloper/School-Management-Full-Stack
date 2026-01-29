@@ -36,7 +36,7 @@ export default function LogIn() {
       if (resp.ok) {
         console.log("Login Datas---->", data);
         const user = data.user;
-        alert("Log In successful");
+        // alert("Log In successful");
 
         //Store tokens to the browser
         localStorage.setItem("token",data.token)

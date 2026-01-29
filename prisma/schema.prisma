@@ -21,6 +21,7 @@ model User{
   role Role @default(STUDENT)
   student Student?
   teacher Teacher?
+  deletedAt DateTime?
 }
 
 

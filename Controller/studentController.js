@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 export const getAllStudents = async (req, res) => {
   try {
     const students = await prisma.user.findMany({
-      where: { role: "STUDENT" },
+      where: { role: "STUDENT",deletedAt:null },
       select: { id: true, fullName: true, email: true, gender: true },
     });
     res.status(200).json(students);
@@ -48,26 +48,39 @@ export const addStudent = async (req, res) => {
 export const editStudent = async (req, res) => {};
 export const deleteStudent = async (req, res) => {
   const { studId } = req.params;
-  // Check now if the student id really exists
+// console.log("Student to be deleted ID  ----> ",studId)
+
+
   try {
+    // 1. Check if the student exists
     const studExist = await prisma.user.findUnique({
       where: { id: studId },
       include: { student: true },
     });
-    if (!studExist || studExist.role !=="STUDENT") {
-      console.log("Student does not exist")
+
+// console.log("Student to be deleted ID  ----> ",studExist)
+
+    // 2. Validation: Check existence, Role, and if ALREADY deleted
+    if (!studExist || studExist.role !== "STUDENT" || studExist.deletedAt !==null) {
+      // console.log("Student does not exist or is already deleted");
       return res
         .status(404)
-        .json({ success: false, message: "Sudent not found" });
+        .json({ success: false, message: "Student not found or already archived" });
     }
-    await prisma.user.delete({
+
+    // 3. Soft Delete (Update instead of Delete)
+    await prisma.user.update({
       where: { id: studId },
+      data: { deletedAt: new Date() }, // Set the timestamp
     });
-    res
-      .status(200)
-      .json({ success: true, message: `Student ${studExist.fullName} is deleted ` });
+
+    res.status(200).json({ 
+      success: true, 
+      message: `Student ${studExist.fullName} is moved to archive` 
+    });
+
   } catch (err) {
-    console.log("Error in deletein---->",err)
+    // console.log("Error in deleting---->", err);
     res.status(500).json({ success: false, error: { message: `${err}` } });
   }
 };
