@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { verifyToken } from "./MiddleWare/authMiddleware.js"
 import  restrictTo  from "./MiddleWare/roleMiddleware.js"
-import {getAllStudents,getClassStudents,addStudent,deleteStudent}  from './Controller/studentController.js'
+import {getAllStudents,getClassStudents,addStudent,deleteStudent,editStudent}  from './Controller/studentController.js'
 import {prisma} from './config/prisma.js'
 
 
@@ -116,6 +116,7 @@ app.post("/api/login", async (req, res) => {
 app.get("/api/admin/students/list", verifyToken,restrictTo("ADMIN"),getAllStudents)
 app.post("/api/register/newStudent",verifyToken,restrictTo("ADMIN","REGISTRAL"),addStudent)
 app.delete("/api/admin/students/:studId",verifyToken,restrictTo("ADMIN"),deleteStudent)
+app.patch("/api/admin/students/:studId",verifyToken,restrictTo("ADMIN"),editStudent)
 
 
 // Deleting the student from the database is the role of the admin
