@@ -46,7 +46,7 @@ export default function Registration() {
       const data = await resp.json();
 
       if (resp.ok) {
-        alert("Registration Successful");
+        // alert("Registration Successful");
         route.push("/login");
         return { success: true };
       } else {

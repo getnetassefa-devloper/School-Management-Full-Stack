@@ -21,6 +21,7 @@ model User{
   role Role @default(STUDENT)
   student Student?
   teacher Teacher?
+  deletedAt DateTime?
 }
 
 
@@ -38,7 +39,8 @@ model Student{
   status UserStatus @default(ACTIVE)
   //connect to user table
   userId String @unique
-  user User @relation(fields:[userId],references:[id])
+  user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+
 }
 
 //Teachers model
@@ -51,7 +53,7 @@ model Teacher{
   salary Decimal?
   //connect to user model
   userId String @unique
-  user User @relation(fields:[userId],references:[id])
+  user User @relation(fields:[userId],references:[id],onDelete:Cascade)
   courses Course[]
 }
 
