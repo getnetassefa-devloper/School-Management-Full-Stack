@@ -34,7 +34,7 @@ export default function LogIn() {
       const data = await resp.json();
 
       if (resp.ok) {
-        console.log("Login Datas---->", data);
+        // console.log("Login Datas---->", data);
         const user = data.user;
         // alert("Log In successful");
 
@@ -43,7 +43,7 @@ export default function LogIn() {
         localStorage.setItem("user",JSON.stringify(user))
 
         // Role based access
-        if (user.role === "ADMIN") route.push("/admin/dashboard");
+        if (user.role === "ADMIN") route.push("/admin");
         else if (user.role === "TEACHER") route.push("/teacher/classes");
         else route.push("/navbar");
 

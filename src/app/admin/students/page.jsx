@@ -18,6 +18,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 import { useState, useEffect } from "react";
 import apiRequest from "@/lib/api";
@@ -30,7 +38,7 @@ export default function StudentsList() {
       try {
         const res = await apiRequest("/admin/students/list");
         const data = await res.json();
-        console.log("The data---->",data)
+        console.log("The data---->", data);
 
         if (!res.ok) {
           throw new Error(data.error || "Fetching error");
