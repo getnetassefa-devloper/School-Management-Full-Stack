@@ -1,13 +1,15 @@
 import ProtectedRoute from "@/components/ProtectedRoute";
 import StudentsList from '@/app/admin/students/page'
-import DashboardMainPage from '@/app/dashboard/page'
+import DashboardContainer from '@/app/dashboard/_components/DashboardContent'
+
+
+
 export default function AdminDashboard() {
   return (
     <ProtectedRoute allowedRoles={["ADMIN"]} className='p-3'>
         <div className=" flex flex-col justify-center gap-3 p-5">
       <h1 className='text-2xl font-bold flex justify-center'>Admin, This is your School Managment System</h1>
-      <DashboardMainPage userRole='ADMIN'/>
-      {/* <StudentsList/> */}
+      <DashboardContainer userRole='ADMIN'/>
         </div>
     </ProtectedRoute>
   );
