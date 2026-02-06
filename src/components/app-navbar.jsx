@@ -68,20 +68,20 @@ export default function UserNavbar({ userRole = "ADMIN" }) {
   return (
     <div className="flex items-center justify-between px-6 py-4 border-b bg-white">
       {/* Brand / Logo */}
-      <div className="font-bold text-xl tracking-tighter">
+      <div className="  font-bold text-xl tracking-tighter">
         SATA<span className="text-blue-600"> College</span>
       </div>
 
       {/* Daynamic Navigation Based on the user Role */}
-      <NavigationMenu>
-        <NavigationMenuList>
+      <NavigationMenu className='flex-1 flex flex-col gap-4 '>
+        <NavigationMenuList className='flex flex-row justify-between gap-3j'>
           {activeUser.map((item, index) =>
             item.type === "dropdown" ? (
               
                 <NavigationMenuItem key={item.title}>
                   <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <ul className="grid w-[400px] gap-3 p-4">
+                  <NavigationMenuContent className='flex'>
+                    <ul className=" flex-1 w-[180px] gap-3 p-4">
                       {item.content.map((subItem) => (
                         <li key={subItem.title}>
                           <NavigationMenuLink asChild>
