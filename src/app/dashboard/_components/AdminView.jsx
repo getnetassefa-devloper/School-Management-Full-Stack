@@ -2,6 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle,CardDescription } from "@/components/ui/card";
 import { Users, UserPlus, CreditCard, TrendingUp,GraduationCap,DollarSign} from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
+import AttendenceTracker from '@/components/attendence/AttendenceTracker'
 
 export default function AdminView() {
   const registrationData = [
@@ -45,6 +46,10 @@ export default function AdminView() {
 
 
       {/* Visualization of Data */}
+      {/* Attendence Tracker */}
+     <div className="">
+      <AttendenceTracker userRole = "ADMIN"/>
+     </div>
 
 
 <div className="grid gap-4 my-8 sm:grid-cols-1 md:grid-cols-7">
@@ -73,6 +78,11 @@ export default function AdminView() {
             </ResponsiveContainer>
           </CardContent>
         </Card>
+
+
+
+
+
 
         {/* Quick Actions / Recent Activity - Spans 3 columns */}
         <Card className="col-span-3">
